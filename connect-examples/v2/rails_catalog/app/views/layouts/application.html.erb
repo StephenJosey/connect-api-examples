@@ -10,8 +10,8 @@
 
   <body>
   <div class="header">
-    <%= link_to "View Catalog", "catalog", {class: 'button_header'} %>
-    <%= link_to "View Cart", "cart_items", {class: 'button_header'} %>
+    <%= link_to "View Catalog", {:controller => :catalog, :action => :index }, {class: 'button_header'} %>
+    <%= link_to "View Cart", {:controller => :cart_items, :action => :view }, {class: 'button_header'} %>
   </div>
   <% if flash[:success] %>
       <div><%= flash[:success] %></div>

@@ -46,3 +46,28 @@ table, th, td {
 .body {
     margin-left: 20px;
 }
+
+form {
+    margin-top: 20px;
+    width: 80%;
+}
+
+label, input {
+    display: inline-block;
+}
+
+label {
+    width: 12%;
+    text-align: left;
+}
+
+label + input {
+    width: 30%;
+}
+
+.button_to {
+    padding: 0;
+    margin: 0;
+}
+
+

@@ -1,0 +1,14 @@
+<div class="body">
+  <%= form_tag('/item/create', method: 'post') do %>
+    <%= label_tag('Product name:') %>
+    <%= text_field_tag(:name, nil, :required => true) %>
+    <br>
+    <%= label_tag('Variation:') %>
+    <%= text_field_tag(:variation_name, nil, :required => true) %>
+    <br>
+    <%= label_tag('Product price:') %>
+    <%= text_field_tag(:price, nil, :required => true) %>
+    <br>
+    <%= submit_tag('Create') %>
+  <% end %>
+</div>

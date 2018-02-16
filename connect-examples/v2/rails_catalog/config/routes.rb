@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   post 'item', to: 'item#view'
   post 'item/update'
+  get 'item/create'
+  post 'item/create'
 
   get 'catalog', to: 'catalog#index'
 

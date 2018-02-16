@@ -1,6 +1,7 @@
 # README
 
 This sample application showcases a variety of ways to utilize Square's Catalog API.
+It also utilizes a basic shopping cart to show a possible way of tracking customer's items before purchase.
 
 Ruby version: 2.4.2
 
