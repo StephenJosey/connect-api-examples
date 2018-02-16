@@ -52,7 +52,7 @@ form {
     width: 80%;
 }
 
-label, input {
+label, input, select {
     display: inline-block;
 }
 
@@ -62,7 +62,7 @@ label {
 }
 
 label + input {
-    width: 30%;
+    width: 20%;
 }
 
 .button_to {

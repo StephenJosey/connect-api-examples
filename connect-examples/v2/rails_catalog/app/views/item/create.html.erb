@@ -1,10 +1,13 @@
 <div class="body">
   <%= form_tag('/item/create', method: 'post') do %>
-    <%= label_tag('Product name:') %>
-    <%= text_field_tag(:name, nil, :required => true) %>
+    <%= label_tag('Product group:') %>
+      <%= select_tag 'name', options_for_select(@product_groups.collect{ |u| [u[:name], u[:id]]}) %>
     <br>
     <%= label_tag('Variation:') %>
     <%= text_field_tag(:variation_name, nil, :required => true) %>
+    <br>
+    <%= label_tag('Category:') %>
+    <%= select_tag 'category', options_for_select(@categories.collect{ |u| [u[:name], u[:id]]}) %>
     <br>
     <%= label_tag('Product price:') %>
     <%= text_field_tag(:price, nil, :required => true) %>

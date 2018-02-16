@@ -26,22 +26,17 @@ class ItemController < ApplicationController
   end
 
   def create
+    @categories = list_categories
+    @product_groups = list_product_groups
     if params[:name].present?
       catalog_api = SquareConnect::CatalogApi.new
       body = SquareConnect::BatchUpsertCatalogObjectsRequest.new
       body.idempotency_key = SecureRandom.uuid
 
-      item = form_catalog_object(params[:name], params[:variation_name], params[:price])
+      item = form_catalog_object(params[:name], params[:variation_name], params[:price], params[:category])
       body.batches = [{
         objects: [item]
       }]
-      # catalog_api = SquareConnect::CatalogApi.new
-      # body = SquareConnect::BatchUpsertCatalogObjectsRequest.new
-      # body.idempotency_key = SecureRandom.uuid
-      # body.batches = [{
-      #   #objects: [form_catalog_object(params[:name], params[:variation_name], params[:price])]
-      #   objects: [item_tea, category]
-      # }]
 
       begin
         response = catalog_api.batch_upsert_catalog_objects(body)
@@ -67,28 +62,76 @@ class ItemController < ApplicationController
     catalog_api.retrieve_catalog_object(object_id).object
   end
 
-
-
-  def form_catalog_object(name, variation, price)
+  # creates the object, based on the template that is found in the docs
+  def form_catalog_object(name, variation, price, category)
+    # object = {
+    #   id: "##{name}",
+    #   type: SquareConnect::CatalogObjectType::ITEM,
+    #   item_data: {
+    #     name: name,
+    #     category_id: category,
+    #     variations: [{
+    #       id: "##{variation}",
+    #       type: SquareConnect::CatalogObjectType::ITEM_VARIATION,
+    #       item_variation_data: {
+    #         item_id: "##{name}",
+    #         name: variation,
+    #         pricing_type: SquareConnect::CatalogPricingType::FIXED_PRICING,
+    #         price_money: {
+    #           amount: (price.to_f * 100).to_i,
+    #           currency: SquareConnect::Currency::USD
+    #         }
+    #       }
+    #     }]
+    #   }
+    # }
     object = {
-      id: "##{name}",
-      type: SquareConnect::CatalogObjectType::ITEM,
-      item_data: {
-        name: name,
-        variations: [{
-          id: "##{variation}",
-          type: SquareConnect::CatalogObjectType::ITEM_VARIATION,
-          item_variation_data: {
-            item_id: "##{name}",
-            name: variation,
-            pricing_type: SquareConnect::CatalogPricingType::FIXED_PRICING,
-            price_money: {
-              amount: (price.to_f * 100).to_i,
-              currency: SquareConnect::Currency::USD
-            }
-          }
-        }]
+      id: "##{variation}",
+      type: SquareConnect::CatalogObjectType::ITEM_VARIATION,
+      item_variation_data: {
+        item_id: name,
+        name: variation,
+        category_id: category,
+        pricing_type: SquareConnect::CatalogPricingType::FIXED_PRICING,
+        price_money: {
+          amount: (price.to_f * 100).to_i,
+          currency: SquareConnect::Currency::USD
+        }
       }
     }
+  end
+
+  def list_product_groups
+    catalog_api = SquareConnect::CatalogApi.new
+    opts = {
+      types: SquareConnect::CatalogObjectType::ITEM
+    }
+    begin
+      response = catalog_api.list_catalog(opts)
+      product_groups = []
+      response.objects.each do |item|
+        product_groups.append(name: item.item_data.name, id: item.id)
+      end
+      return product_groups
+    rescue SquareConnect::ApiError => e
+      puts "Error while calling list_catalog: #{e.response_body}"
+    end
+  end
+
+  def list_categories
+    catalog_api = SquareConnect::CatalogApi.new
+    opts = {
+      types: SquareConnect::CatalogObjectType::CATEGORY
+    }
+    begin
+      response = catalog_api.list_catalog(opts)
+      category_names = []
+      response.objects.each do |category|
+        category_names.append(name: category.category_data.name, id: category.id)
+      end
+      return category_names
+    rescue SquareConnect::ApiError => e
+      puts "Error while calling list_catalog: #{e.response_body}"
+    end
   end
 end
