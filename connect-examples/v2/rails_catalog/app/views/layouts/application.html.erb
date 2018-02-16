@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RailsCatalog</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+  <div class="header">
+    <%= link_to "View Catalog", "catalog", {class: 'button_header'} %>
+    <%= link_to "View Cart", "cart_items", {class: 'button_header'} %>
+  </div>
+  <% if flash[:success] %>
+      <div><%= flash[:success] %></div>
+  <% end %>
+  <% if flash[:error] %>
+      <div><%= flash[:error] %></div>
+  <% end %>
+    <%= yield %>
+  </body>
+</html>

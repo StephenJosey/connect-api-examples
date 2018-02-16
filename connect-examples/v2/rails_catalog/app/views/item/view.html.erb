@@ -1,0 +1,17 @@
+<div class="body">
+  <h1>
+    <%= "#{@parent_object.item_data&.name}  #{@object.item_variation_data&.name} -
+      #{number_to_currency(@object.item_variation_data&.price_money&.amount.to_f / 100)}"%>
+  </h1>
+
+  <%= form_tag("/item/update", method: "post") do %>
+    <%= label_tag("Product name:") %>
+    <%= text_field_tag(:name, "#{@object.item_variation_data&.name}") %>
+    <br>
+    <%= label_tag("Product price:") %>
+    <%= text_field_tag(:price, "#{@object.item_variation_data&.price_money&.amount.to_f / 100}") %>
+    <br>
+    <input type="hidden" name="object" value=<%= @object.id %> >
+    <%= submit_tag("Update") %>
+  <% end %>
+</div>

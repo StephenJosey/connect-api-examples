@@ -1,0 +1,18 @@
+<div class="body">
+  <h1>List of inventory:</h1>
+  <table>
+    <% @catalog_objects.each do |object| %>
+      <% object.item_data&.variations&.each do |item| %>
+        <tr>
+          <td>
+            <%= link_to "#{object.item_data&.name} #{item.item_variation_data&.name.to_s}",
+                        item_path( {object_id: item.id}), :method => :post %>
+          </td>
+          <td>
+            <%= button_to "Add to cart", {:controller => "cart_items", :action => "create", :product_id => item.id, :quantity => 1}, :method => :post %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
