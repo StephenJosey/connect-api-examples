@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
+  get 'item/create'
+  get 'item/search'
   post 'item', to: 'item#view'
   post 'item/update'
-  get 'item/create'
   post 'item/create'
   post 'item/delete'
 

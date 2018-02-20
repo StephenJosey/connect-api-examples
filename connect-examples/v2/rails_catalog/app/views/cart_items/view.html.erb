@@ -10,7 +10,7 @@
       <% @items.each do |item| %>
         <tr>
           <td><%= "#{item[:parent].object.item_data.name} #{item[:product].object.item_variation_data.name}" %></td>
-          <td><%= number_to_currency(item[:product].object.item_variation_data.price_money.amount.to_f / 100) %></td>
+          <td><%= number_to_currency(item[:product].object.item_variation_data.price_money&.amount.to_f / 100) %></td>
           <td><%= item[:quantity] %></td>
           <td><%= button_to 'Remove from cart', {:controller => 'cart_items', :action => 'remove', :id => item[:id]}, :method => :post %></td>
         </tr>

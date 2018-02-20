@@ -36,6 +36,11 @@ class ItemController < ApplicationController
     end
   end
 
+  def search
+    catalog_api = SquareConnect::CatalogApi.new
+
+  end
+
   def create
     @categories = list_categories.append(name: 'New...')
     @product_groups = list_product_groups.append(name: 'New...');
@@ -114,11 +119,12 @@ class ItemController < ApplicationController
         item_id: name,
         name: variation,
         category_id: category,
-        pricing_type: SquareConnect::CatalogPricingType::FIXED_PRICING,
-        price_money: {
-          amount: (price.to_f * 100).to_i,
-          currency: SquareConnect::Currency::USD
-        }
+        # pricing_type: SquareConnect::CatalogPricingType::FIXED_PRICING,
+        pricing_type: SquareConnect::CatalogPricingType::VARIABLE_PRICING,
+        # price_money: {
+        #   amount: (price.to_f * 100).to_i,
+        #   currency: SquareConnect::Currency::USD
+        # }
       }
     }
   end
