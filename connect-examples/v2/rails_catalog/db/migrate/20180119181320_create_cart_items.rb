@@ -4,6 +4,7 @@ class CreateCartItems < ActiveRecord::Migration[5.1]
       t.integer :cart_id
       t.integer :quantity
       t.string :product_id
+      t.string :parent_id
 
       t.timestamps
     end

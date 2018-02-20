@@ -13,3 +13,26 @@
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
+//= require_self
+
+
+function display_products() {
+  var current_selection = document.getElementById('products');
+  if (current_selection.options[current_selection.selectedIndex].text === 'New...') {
+    if (document.getElementById('new_product').style.visibility === 'hidden' ||
+      document.getElementById('new_product').style.visibility === '')
+      document.getElementById('new_product').style.visibility = 'visible';
+  } else {
+    document.getElementById('new_product').style.visibility = 'hidden';
+  }
+}
+function display_category() {
+  var current_selection = document.getElementById('category');
+  if (current_selection.options[current_selection.selectedIndex].text === 'New...') {
+    if (document.getElementById('new_category').style.visibility === 'hidden' ||
+        document.getElementById('new_category').style.visibility === '')
+      document.getElementById('new_category').style.visibility = 'visible';
+  } else {
+    document.getElementById('new_category').style.visibility = 'hidden';
+  }
+}

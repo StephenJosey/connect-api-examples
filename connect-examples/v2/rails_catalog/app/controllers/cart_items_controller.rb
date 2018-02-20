@@ -15,7 +15,9 @@ class CartItemsController < ApplicationController
   end
 
   def remove
-    pp @items
     @cart.remove_product(params)
+    flash[:success] = 'Item successfully removed from cart!'
+    redirect_back(fallback_location:
+                    { controller: 'cart_items', action: 'index' })
   end
 end

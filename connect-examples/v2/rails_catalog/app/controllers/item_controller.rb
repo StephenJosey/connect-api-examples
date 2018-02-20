@@ -14,7 +14,7 @@ class ItemController < ApplicationController
     catalog_api = SquareConnect::CatalogApi.new
     body = {
       idempotency_key: SecureRandom.uuid,
-      object: update_object(fetch_object(params[:object]),
+      object: update_object(fetch_object(params[:object_id]),
                             params[:name], params[:price])
     }
     begin
@@ -25,22 +25,44 @@ class ItemController < ApplicationController
     end
   end
 
+  def delete
+    catalog_api = SquareConnect::CatalogApi.new
+    begin
+      catalog_api.delete_catalog_object(params[:object_id])
+      flash[:success] = 'Item successfully deleted!'
+      redirect_to :controller => 'catalog', :action => 'index'
+    rescue SquareConnect::ApiError => e
+      puts "Error while trying to delete object #{e.response_body}"
+    end
+  end
+
   def create
-    @categories = list_categories
-    @product_groups = list_product_groups
-    if params[:name].present?
+    @categories = list_categories.append(name: 'New...')
+    @product_groups = list_product_groups.append(name: 'New...');
+    if params[:name].present? || params[:new_product].present?
       catalog_api = SquareConnect::CatalogApi.new
       body = SquareConnect::BatchUpsertCatalogObjectsRequest.new
       body.idempotency_key = SecureRandom.uuid
-
-      item = form_catalog_object(params[:name], params[:variation_name], params[:price], params[:category])
       body.batches = [{
-        objects: [item]
+        objects: []
       }]
+      parent_id = params[:name]
+      category_id = params[:category]
+      if params[:new_category] != ''
+        category_id = "##{params[:new_category]}"
+        body.batches[0][:objects].append(form_category_object(category_id))
+      end
+      if params[:new_product] != ''
+        parent_id = "##{params[:new_product]}"
+        body.batches[0][:objects].append(form_parent_object(parent_id, category_id))
+      end
+      item = form_variation_object(parent_id, params[:variation_name], params[:price], category_id)
+      body.batches[0][:objects].append(item)
 
       begin
-        response = catalog_api.batch_upsert_catalog_objects(body)
+        catalog_api.batch_upsert_catalog_objects(body)
         flash[:success] = 'Item successfully created!'
+        redirect_to :controller => 'catalog', :action => 'index'
       rescue SquareConnect::ApiError => e
         puts "Error while calling upsert_catalog_object: #{e.response_body}"
       end
@@ -62,29 +84,29 @@ class ItemController < ApplicationController
     catalog_api.retrieve_catalog_object(object_id).object
   end
 
-  # creates the object, based on the template that is found in the docs
-  def form_catalog_object(name, variation, price, category)
-    # object = {
-    #   id: "##{name}",
-    #   type: SquareConnect::CatalogObjectType::ITEM,
-    #   item_data: {
-    #     name: name,
-    #     category_id: category,
-    #     variations: [{
-    #       id: "##{variation}",
-    #       type: SquareConnect::CatalogObjectType::ITEM_VARIATION,
-    #       item_variation_data: {
-    #         item_id: "##{name}",
-    #         name: variation,
-    #         pricing_type: SquareConnect::CatalogPricingType::FIXED_PRICING,
-    #         price_money: {
-    #           amount: (price.to_f * 100).to_i,
-    #           currency: SquareConnect::Currency::USD
-    #         }
-    #       }
-    #     }]
-    #   }
-    # }
+  def form_parent_object(name, category)
+    object = {
+      id: name,
+      type: SquareConnect::CatalogObjectType::ITEM,
+      item_data: {
+        name: name.delete('#'),
+        category_id: category
+      }
+    }
+  end
+
+  def form_category_object(name)
+    object = {
+      id: name,
+      type: SquareConnect::CatalogObjectType::CATEGORY,
+      category_data: {
+        name: name.delete('#')
+      }
+    }
+  end
+
+  # creates the variation, based on the template that is found in the docs
+  def form_variation_object(name, variation, price, category)
     object = {
       id: "##{variation}",
       type: SquareConnect::CatalogObjectType::ITEM_VARIATION,

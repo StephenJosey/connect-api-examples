@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20180119181320) do
     t.integer "cart_id"
     t.integer "quantity"
     t.string "product_id"
+    t.string "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

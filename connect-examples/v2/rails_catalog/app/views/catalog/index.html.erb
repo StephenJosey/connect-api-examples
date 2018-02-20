@@ -12,7 +12,8 @@
             <%= "#{number_to_currency(item.item_variation_data.price_money.amount.to_f / 100)}" %>
           </td>
           <td>
-            <%= button_to 'Add to cart', {:controller => 'cart_items', :action => 'create', :product_id => item.id, :quantity => 1}, :method => :post %>
+            <%= button_to 'Add to cart',
+                          {:controller => 'cart_items', :action => 'create', :product_id => item.id, :quantity => 1, :parent_id => object.id}, :method => :post %>
           </td>
         </tr>
       <% end %>

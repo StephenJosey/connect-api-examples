@@ -11,7 +11,8 @@
     <%= label_tag('Product price:') %>
     <%= text_field_tag(:price, "#{@object.item_variation_data&.price_money&.amount.to_f / 100}") %>
     <br>
-    <input type="hidden" name="object" value=<%= @object.id %> >
+    <input type="hidden" name="object_id" value=<%= @object.id %> >
     <%= submit_tag('Update') %>
   <% end %>
+  <%= button_to 'Delete item', {:controller => 'item', :action => 'delete', :object_id => @object.id}, {:method => :post, :class => 'delete'} %>
 </div>

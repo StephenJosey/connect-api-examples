@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   post 'item/update'
   get 'item/create'
   post 'item/create'
+  post 'item/delete'
 
   get 'catalog', to: 'catalog#index'
 

@@ -20,7 +20,8 @@ class ApplicationController < ActionController::Base
       if item.cart_id == session[:cart_id]
         begin
           product = catalog_api.retrieve_catalog_object(item.product_id)
-          @items.append(product: product, quantity: item.quantity, id: item.id)
+          parent = catalog_api.retrieve_catalog_object(item.parent_id)
+          @items.append(product: product, parent: parent, quantity: item.quantity, id: item.id)
         rescue SquareConnect::ApiError => e
           puts "Exception when calling CatalogApi->retrieve_object: #{e}"
         end

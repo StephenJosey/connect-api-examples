@@ -10,6 +10,7 @@ class Cart < ApplicationRecord
       current_item.save
     else
       cart_items.create(product_id: params[:product_id].to_s,
+                        parent_id: params[:parent_id].to_s,
                         quantity: params[:quantity],
                         cart_id: id)
     end
