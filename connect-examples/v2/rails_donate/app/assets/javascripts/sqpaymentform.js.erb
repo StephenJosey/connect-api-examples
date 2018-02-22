@@ -1,8 +1,8 @@
 // Set the application ID
-var applicationId = "";
+var applicationId = "<%= Rails.application.secrets.square_access_token %>" ;
 
 // Set the location ID
-var locationId = "";
+var locationId = "<%= "#{Rails.application.secrets.square_location_id}" %>";
 
 /*
  * function: requestCardNonce
@@ -35,16 +35,6 @@ var paymentForm = new SqPaymentForm({
     fontSize: '.9em'
   }],
 
-  // Initialize Apple Pay placeholder ID
-  applePay: {
-    elementId: 'sq-apple-pay'
-  },
-
-  // Initialize Masterpass placeholder ID
-  masterpass: {
-    elementId: 'sq-masterpass'
-  },
-
   // Initialize the credit card placeholders
   cardNumber: {
     elementId: 'sq-card-number',
@@ -70,24 +60,6 @@ var paymentForm = new SqPaymentForm({
      * Triggered when: the page is loaded.
      */
     methodsSupported: function (methods) {
-
-      var applePayBtn = document.getElementById('sq-apple-pay');
-      var applePayLabel = document.getElementById('sq-apple-pay-label');
-      var masterpassBtn = document.getElementById('sq-masterpass');
-      var masterpassLabel = document.getElementById('sq-masterpass-label');
-
-      // Only show the button if Apple Pay for Web is enabled
-      // Otherwise, display the wallet not enabled message.
-      if (methods.applePay === true) {
-        applePayBtn.style.display = 'inline-block';
-        applePayLabel.style.display = 'none' ;
-      }
-      // Only show the button if Masterpass is enabled
-      // Otherwise, display the wallet not enabled message.
-      if (methods.masterpass === true) {
-        masterpassBtn.style.display = 'inline-block';
-        masterpassLabel.style.display = 'none';
-      }
     },
 
     /*

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   # set the cart for each user
   private
+
   def set_cart
     @cart = Cart.find(session[:cart_id])
   rescue ActiveRecord::RecordNotFound
@@ -21,7 +22,8 @@ class ApplicationController < ActionController::Base
         begin
           product = catalog_api.retrieve_catalog_object(item.product_id)
           parent = catalog_api.retrieve_catalog_object(item.parent_id)
-          @items.append(product: product, parent: parent, quantity: item.quantity, id: item.id)
+          @items.append(product: product, parent: parent,
+                        quantity: item.quantity, id: item.id)
         rescue SquareConnect::ApiError => e
           puts "Exception when calling CatalogApi->retrieve_object: #{e}"
         end

@@ -4,16 +4,17 @@
     <title>RailsDonate</title>
     <%= csrf_meta_tags %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <!-- link to the SqPaymentForm library -->
-    <%= javascript_include_tag "https://js.squareup.com/v2/paymentform" %>
+    <script type="application/javascript" src="https://js.squareup.com/v2/paymentform" %></script>
 
     <!-- link to the local SqPaymentForm initialization -->
-    <%= javascript_include_tag "sqpaymentform.js" %>
+    <%= javascript_include_tag "sqpaymentform" %>
 
     <!-- link to the custom styles for SqPaymentForm -->
     <%= stylesheet_link_tag "sqpaymentform.css"%>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
